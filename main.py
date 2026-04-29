@@ -80,4 +80,31 @@ def main():
         elif choice == "7":  # Фильтрация транзакций
             criteria = view.get_filter_criteria()
             if criteria:
-                transactions = controller.get_trans
+                transactions = controller.get_transactions(**criteria)
+                view.display_transactions(transactions, "Отфильтрованные транзакции")
+        
+        elif choice == "8":  # Начислить проценты
+            count = controller.add_interest_to_savings()
+            if count > 0:
+                view.display_message(f"Проценты начислены на {count} сберегательных счетов")
+            else:
+                view.display_message("Нет сберегательных счетов для начисления процентов")
+        
+        elif choice == "9":  # Закрыть счет
+            accounts = controller.get_all_accounts()
+            index = view.select_account(accounts, "закрытия")
+            if index is not None:
+                if controller.delete_account(index):
+                    view.display_message("Счет закрыт")
+        
+        elif choice == "0":  # Выход
+            view.display_message("До свидания! 👋")
+            break
+        
+        else:
+            view.display_message("Неверный выбор! Попробуйте снова.", True)
+
+if __name__ == "__main__":
+    print("\n🏦 Добро пожаловать в Bank Account System!")
+    print("📱 Управляйте счетами, переводами и отслеживайте транзакции.\n")
+    main()
